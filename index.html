@@ -43,7 +43,6 @@
       overflow: hidden;
     }
 
-    /* Верхняя панель */
     #top-bar {
       padding: 12px 14px 6px;
       display: flex;
@@ -59,7 +58,6 @@
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
-    /* Зона доставки */
     #delivery-zone {
       height: 115px;
       position: relative;
@@ -103,7 +101,6 @@
       margin-bottom: 3px;
     }
 
-    /* Скутеры */
     .scooter {
       position: absolute;
       bottom: 14px;
@@ -125,14 +122,12 @@
       border: 1px solid #fff;
     }
 
-    /* Основная зона */
     #main-area {
       flex: 1;
       display: flex;
       overflow: hidden;
     }
 
-    /* Лифт */
     #elevator-zone {
       width: 76px;
       background: #12121f;
@@ -198,7 +193,6 @@
       font-size: 11px;
     }
 
-    /* Этажи */
     #floors {
       flex: 1;
       display: flex;
@@ -214,7 +208,13 @@
       border-radius: 14px;
       padding: 10px;
       border: 1px solid rgba(255,255,255,0.08);
-      min-height: 108px;
+      min-height: 115px;
+      position: relative;
+    }
+
+    .floor.locked {
+      opacity: 0.55;
+      filter: grayscale(0.6);
     }
 
     .floor-header {
@@ -240,42 +240,98 @@
 
     .plants-row {
       display: flex;
-      gap: 5px;
-      height: 46px;
+      gap: 6px;
+      height: 54px;
       align-items: flex-end;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       overflow: hidden;
     }
 
+    /* ===== НОВЫЕ КУСТЫ ===== */
     .plant {
-      width: 34px;
-      height: 40px;
+      width: 38px;
+      height: 52px;
       position: relative;
       flex-shrink: 0;
     }
+
     .plant-pot {
       position: absolute;
       bottom: 0;
-      left: 5px;
+      left: 7px;
       width: 24px;
-      height: 13px;
-      background: #8d6e63;
-      border-radius: 2px 2px 4px 4px;
-      border: 1px solid #5d4037;
+      height: 12px;
+      background: linear-gradient(#a1887f, #6d4c41);
+      border-radius: 2px 2px 5px 5px;
+      border: 1px solid #4e342e;
+      z-index: 2;
     }
-    .plant-body {
+
+    .plant-stem {
       position: absolute;
       bottom: 11px;
       left: 50%;
       transform: translateX(-50%);
-      width: 26px;
-      height: 26px;
-      border-radius: 50% 50% 45% 45%;
-      box-shadow: inset -3px -3px 0 rgba(0,0,0,0.18);
+      width: 3px;
+      height: 14px;
+      background: #558b2f;
+      border-radius: 2px;
+      z-index: 1;
     }
-    .plant-body.green  { background: radial-gradient(circle at 30% 30%, #81c784, #2e7d32); }
-    .plant-body.purple { background: radial-gradient(circle at 30% 30%, #ce93d8, #6a1b9a); }
-    .plant-body.pink   { background: radial-gradient(circle at 30% 30%, #f48fb1, #c2185b); }
+
+    .plant-leaves {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 28px;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 14px;
+      height: 18px;
+      background: #66bb6a;
+      border-radius: 0 80% 0 80%;
+      transform-origin: bottom center;
+    }
+
+    .leaf:nth-child(1) { left: 2px; transform: rotate(-35deg); background: #43a047; }
+    .leaf:nth-child(2) { left: 9px; transform: rotate(0deg); height: 20px; background: #66bb6a; }
+    .leaf:nth-child(3) { left: 16px; transform: rotate(35deg); background: #43a047; }
+
+    /* Шишки (появляются при росте) */
+    .bud {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32);
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .plant.stage-2 .bud { opacity: 0.7; }
+    .plant.stage-3 .bud { opacity: 1; transform: scale(1.15); }
+
+    .bud.b1 { top: 4px; left: 8px; }
+    .bud.b2 { top: 2px; left: 14px; }
+    .bud.b3 { top: 7px; left: 11px; }
+
+    /* Цвета для разных сортов */
+    .plant.green .leaf { background: #66bb6a; }
+    .plant.green .leaf:nth-child(1), .plant.green .leaf:nth-child(3) { background: #43a047; }
+    .plant.green .bud { background: radial-gradient(circle at 30% 30%, #a5d6a7, #2e7d32); }
+
+    .plant.purple .leaf { background: #ab47bc; }
+    .plant.purple .leaf:nth-child(1), .plant.purple .leaf:nth-child(3) { background: #8e24aa; }
+    .plant.purple .bud { background: radial-gradient(circle at 30% 30%, #e1bee7, #6a1b9a); }
+
+    .plant.pink .leaf { background: #ec407a; }
+    .plant.pink .leaf:nth-child(1), .plant.pink .leaf:nth-child(3) { background: #d81b60; }
+    .plant.pink .bud { background: radial-gradient(circle at 30% 30%, #f8bbd0, #ad1457); }
 
     .drone {
       position: absolute;
@@ -317,7 +373,23 @@
       white-space: nowrap;
     }
 
-    /* Оффлайн */
+    .unlock-btn {
+      background: #ff9800 !important;
+    }
+
+    .locked-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      z-index: 5;
+    }
+
     #offline-popup {
       position: absolute;
       inset: 0;
@@ -359,7 +431,6 @@
 
     <div id="delivery-zone">
       <div class="city-bg"></div>
-
       <div class="building left">
         <div class="label">Склад</div>
         <div id="warehouse-amount">0</div>
@@ -368,7 +439,6 @@
         <div class="label">Курьеры</div>
         <div>Lv.<span id="courier-level">1</span></div>
       </div>
-
       <div class="scooter" id="scooter1">🛵<div class="scooter-load" id="load1">0</div></div>
       <div class="scooter" id="scooter2">🛵<div class="scooter-load" id="load2">0</div></div>
     </div>
@@ -389,6 +459,7 @@
       </aside>
 
       <main id="floors">
+        <!-- Этаж 1 - всегда открыт -->
         <div class="floor" id="floor-1">
           <div class="floor-header">
             <div class="floor-name">🌿 Green Kush</div>
@@ -402,7 +473,12 @@
           </div>
         </div>
 
-        <div class="floor" id="floor-2">
+        <!-- Этаж 2 - закрыт -->
+        <div class="floor locked" id="floor-2">
+          <div class="locked-overlay" id="lock-2">
+            🔒
+            <button class="unlock-btn" data-unlock="2" style="margin-top:8px;font-size:13px;">Открыть 2500</button>
+          </div>
           <div class="floor-header">
             <div class="floor-name">🍇 Purple Haze</div>
             <div class="floor-level">⬆ <span class="lvl">1</span></div>
@@ -415,7 +491,12 @@
           </div>
         </div>
 
-        <div class="floor" id="floor-3">
+        <!-- Этаж 3 - закрыт -->
+        <div class="floor locked" id="floor-3">
+          <div class="locked-overlay" id="lock-3">
+            🔒
+            <button class="unlock-btn" data-unlock="3" style="margin-top:8px;font-size:13px;">Открыть 12000</button>
+          </div>
           <div class="floor-header">
             <div class="floor-name">🍬 Bubblegum</div>
             <div class="floor-level">⬆ <span class="lvl">1</span></div>
@@ -461,9 +542,9 @@
     };
 
     const floors = [
-      { id: 1, color: "green",  level: 1, baseGrow: 2.5, boxCap: 20, current: 0 },
-      { id: 2, color: "purple", level: 1, baseGrow: 3.4, boxCap: 20, current: 0 },
-      { id: 3, color: "pink",   level: 1, baseGrow: 4.6, boxCap: 20, current: 0 }
+      { id: 1, color: "green",  level: 1, baseGrow: 2.4, boxCap: 20, current: 0, unlocked: true,  unlockCost: 0 },
+      { id: 2, color: "purple", level: 1, baseGrow: 3.3, boxCap: 20, current: 0, unlocked: false, unlockCost: 2500 },
+      { id: 3, color: "pink",   level: 1, baseGrow: 4.5, boxCap: 20, current: 0, unlocked: false, unlockCost: 12000 }
     ];
 
     const elevator = {
@@ -473,7 +554,6 @@
 
     const couriers = { level: 1, count: 2, capacityPer: 11, speed: 3.1, lastDelivery: Date.now() };
 
-    // Скутеры
     const scooters = [
       { el: null, x: 85, dir: 1, speed: 0.55 },
       { el: null, x: 200, dir: -1, speed: 0.42 }
@@ -490,6 +570,7 @@
 
     function produce(delta) {
       floors.forEach(f => {
+        if (!f.unlocked) return;
         const can = Math.floor(delta / floorGrowTime(f));
         if (can > 0) f.current = Math.min(f.current + can, f.boxCap);
       });
@@ -498,7 +579,7 @@
     function updateElevator(now) {
       const t = elevMoveTime() * 1000;
       if (elevator.state === "idle") {
-        if (floors.some(f => f.current > 0) || elevator.currentLoad > 0) {
+        if (floors.some(f => f.unlocked && f.current > 0) || elevator.currentLoad > 0) {
           elevator.state = "down";
           elevator.targetFloor = 3;
           elevator.lastAction = now;
@@ -507,7 +588,7 @@
       }
       if (elevator.state === "down" && now - elevator.lastAction >= t) {
         const f = floors.find(fl => fl.id === elevator.targetFloor);
-        if (f) {
+        if (f && f.unlocked) {
           const take = Math.min(elevCapacity() - elevator.currentLoad, f.current);
           f.current -= take;
           elevator.currentLoad += take;
@@ -556,7 +637,12 @@
         coins: player.coins,
         lastSaveTime: Date.now(),
         warehouse: warehouse.amount,
-        floors: floors.map(f => ({ level: f.level, current: f.current, boxCap: f.boxCap })),
+        floors: floors.map(f => ({
+          level: f.level,
+          current: f.current,
+          boxCap: f.boxCap,
+          unlocked: f.unlocked
+        })),
         elevator: { level: elevator.level },
         couriers: { level: couriers.level, count: couriers.count }
       }));
@@ -573,6 +659,7 @@
           floors[i].level = s.level || 1;
           floors[i].current = s.current || 0;
           floors[i].boxCap = s.boxCap || 20;
+          floors[i].unlocked = s.unlocked || (i === 0);
         });
         if (d.elevator) elevator.level = d.elevator.level || 1;
         if (d.couriers) {
@@ -586,27 +673,55 @@
       const sec = Math.min((Date.now() - player.lastSaveTime) / 1000, 8 * 3600);
       if (sec < 25) return 0;
       let prod = 0;
-      floors.forEach(f => prod += Math.floor(sec / floorGrowTime(f) * 0.6));
+      floors.forEach(f => {
+        if (f.unlocked) prod += Math.floor(sec / floorGrowTime(f) * 0.6);
+      });
       const del = Math.min(prod, (sec / courierInterval()) * courierCapacity());
       return Math.floor(del * 7.8 * 0.65);
     }
 
     function renderPlants(f) {
       const row = document.getElementById(`plants-${f.id}`);
-      const maxShow = 7;
-      const count = Math.min(maxShow, Math.ceil((f.current / f.boxCap) * maxShow) + (f.current > 0 ? 1 : 0));
-      if (row.children.length === count) return;
+      if (!f.unlocked) {
+        row.innerHTML = "";
+        return;
+      }
+
+      const maxShow = 6;
+      const ratio = f.current / f.boxCap;
+      const count = Math.min(maxShow, Math.ceil(ratio * maxShow) + (f.current > 0 ? 1 : 0));
+
+      // Стадия роста для шишек
+      let stage = 1;
+      if (ratio > 0.45) stage = 2;
+      if (ratio > 0.75) stage = 3;
+
+      if (row.dataset.count == count && row.dataset.stage == stage) return;
+      row.dataset.count = count;
+      row.dataset.stage = stage;
+
       row.innerHTML = "";
       for (let i = 0; i < count; i++) {
         const p = document.createElement("div");
-        p.className = "plant";
-        p.innerHTML = `<div class="plant-body ${f.color}"></div><div class="plant-pot"></div>`;
-        if (Math.random() > 0.55) {
+        p.className = `plant ${f.color} stage-${stage}`;
+        p.innerHTML = `
+          <div class="plant-leaves">
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="bud b1"></div>
+            <div class="bud b2"></div>
+            <div class="bud b3"></div>
+          </div>
+          <div class="plant-stem"></div>
+          <div class="plant-pot"></div>
+        `;
+        if (Math.random() > 0.6 && stage > 1) {
           const d = document.createElement("div");
           d.className = "drone";
           d.textContent = "🛸";
-          d.style.left = (6 + Math.random()*14) + "px";
-          d.style.top = (-8 - Math.random()*6) + "px";
+          d.style.left = (5 + Math.random()*16) + "px";
+          d.style.top = (-10 - Math.random()*6) + "px";
           d.style.animationDelay = (Math.random()*2) + "s";
           p.appendChild(d);
         }
@@ -634,6 +749,18 @@
         el.querySelector(".box-cap").textContent = f.boxCap;
         el.querySelector(".box-fill").style.width = (f.current / f.boxCap * 100) + "%";
         el.querySelector(".cost").textContent = floorUpgradeCost(f);
+
+        // Блокировка
+        if (f.unlocked) {
+          el.classList.remove("locked");
+          const lock = document.getElementById(`lock-${f.id}`);
+          if (lock) lock.style.display = "none";
+        } else {
+          el.classList.add("locked");
+          const lock = document.getElementById(`lock-${f.id}`);
+          if (lock) lock.style.display = "flex";
+        }
+
         renderPlants(f);
       });
 
@@ -662,12 +789,32 @@
     document.querySelectorAll("[data-floor]").forEach(btn => {
       btn.onclick = () => {
         const f = floors.find(fl => fl.id === +btn.dataset.floor);
+        if (!f.unlocked) return;
         const c = floorUpgradeCost(f);
         if (player.coins >= c) {
           player.coins -= c; f.level++;
           f.boxCap = Math.floor(20 * (1 + f.level * 0.27));
           haptic("success"); save(); render();
         } else haptic("error");
+      };
+    });
+
+    // Открытие этажей
+    document.querySelectorAll("[data-unlock]").forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const id = +btn.dataset.unlock;
+        const f = floors.find(fl => fl.id === id);
+        if (f.unlocked) return;
+        if (player.coins >= f.unlockCost) {
+          player.coins -= f.unlockCost;
+          f.unlocked = true;
+          haptic("success");
+          save();
+          render();
+        } else {
+          haptic("error");
+        }
       };
     });
 
