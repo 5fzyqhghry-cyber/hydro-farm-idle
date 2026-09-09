@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hydro Farm Idle — MVP</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --panel: #16213e;
+      --accent: #0f3460;
+      --text: #e8e8e8;
+      --green: #4CAF50;
+      --purple: #9C27B0;
+      --pink: #E91E63;
+      --gold: #FFD700;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: #0d0d1a;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    #game {
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ===== ВЕРХНЯЯ ЗОНА ===== */
+    #top-zone {
+      background: var(--panel);
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--accent);
+      flex-shrink: 0;
+    }
+
+    .coins {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .warehouse, .couriers {
+      background: var(--accent);
+      padding: 8px 10px;
+      border-radius: 10px;
+      flex: 1;
+    }
+
+    .couriers button, .elev-btn, .floor button {
+      margin-top: 6px;
+      width: 100%;
+      padding: 7px;
+      border: none;
+      border-radius: 8px;
+      background: #e94560;
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .couriers button:active, .elev-btn:active, .floor button:active {
+      transform: scale(0.96);
+      opacity: 0.9;
+    }
+
+    /* ===== ОСНОВНАЯ ОБЛАСТЬ ===== */
+    #main-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ===== ЛИФТ ===== */
+    #elevator-zone {
+      width: 90px;
+      background: #0f0f23;
+      border-right: 2px solid var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 6px;
+      flex-shrink: 0;
+    }
+
+    .elev-info {
+      text-align: center;
+      font-size: 12px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    #elevator-shaft {
+      flex: 1;
+      width: 46px;
+      background: #1a1a2e;
+      border: 2px solid #333;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    #elevator-cabin {
+      position: absolute;
+      left: 3px;
+      width: 36px;
+      height: 28px;
+      background: linear-gradient(to bottom, #4fc3f7, #0288d1);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: #fff;
+      transition: top 0.4s ease-in-out;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .elev-btn {
+      font-size: 11px;
+      padding: 8px 4px;
+    }
+
+    /* ===== ЭТАЖИ ===== */
+    #floors {
+      flex: 1;
+      display: flex;
+      flex-direction: column-reverse; /* этаж 1 снизу */
+      padding: 8px;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .floor {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 10px;
+      border-left: 6px solid var(--color);
+      position: relative;
+    }
+
+    .floor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .level {
+      background: rgba(255,255,255,0.12);
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .plants {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+      height: 22px;
+    }
+
+    .plant {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--color);
+      opacity: 0.85;
+    }
+
+    .box {
+      height: 14px;
+      background: #0d0d1a;
+      border-radius: 7px;
+      overflow: hidden;
+      margin-bottom: 6px;
+      border: 1px solid #333;
+    }
+
+    .box-fill {
+      height: 100%;
+      background: var(--color);
+      width: 0%;
+      transition: width 0.3s;
+      border-radius: 7px;
+    }
+
+    .box-label {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    /* Оффлайн попап */
+    #offline-popup {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    #offline-popup.show {
+      display: flex;
+    }
+
+    .popup-content {
+      background: var(--panel);
+      padding: 24px;
+      border-radius: 16px;
+      text-align: center;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .popup-content h2 {
+      margin-bottom: 12px;
+      color: var(--gold);
+    }
+
+    .popup-content button {
+      margin-top: 16px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 10px;
+      background: #e94560;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <!-- Верх -->
+    <header id="top-zone">
+      <div class="coins">💰 <span id="coins">0</span></div>
+      <div class="top-row">
+        <div class="warehouse">
+          📦 Склад<br>
+          <strong id="warehouse-amount">0</strong> / 500
+        </div>
+        <div class="couriers">
+          🛵 Курьеры: <span id="courier-count">1</span><br>
+          Lv.<span id="courier-level">1</span>
+          <button id="upgrade-courier">Апгрейд (<span id="courier-cost">200</span>)</button>
+        </div>
+      </div>
+    </header>
+
+    <div id="main-area">
+      <!-- Лифт -->
+      <aside id="elevator-zone">
+        <div class="elev-info">
+          🛗 Лифт<br>
+          Lv.<span id="elev-level">1</span><br>
+          <span id="elev-load">0/30</span>
+        </div>
+        <div id="elevator-shaft">
+          <div id="elevator-cabin">0</div>
+        </div>
+        <button class="elev-btn" id="upgrade-elev">Апгрейд<br>(<span id="elev-cost">120</span>)</button>
+      </aside>
+
+      <!-- Этажи -->
+      <main id="floors">
+        <!-- Этаж 1 - Green Kush -->
+        <div class="floor" id="floor-1" style="--color: #4CAF50">
+          <div class="floor-header">
+            <span>🌿 Green Kush</span>
+            <span class="level">Lv.<span class="lvl">1</span></span>
+          </div>
+          <div class="plants" id="plants-1"></div>
+          <div class="box-label">Коробка: <span class="box-count">0</span>/20</div>
+          <div class="box"><div class="box-fill"></div></div>
+          <button data-floor="1">Апгрейд (<span class="cost">50</span>)</button>
+        </div>
+
+        <!-- Этаж 2 - Purple Haze -->
+        <div class="floor" id="floor-2" style="--color: #9C27B0">
+          <div class="floor-header">
+            <span>🍇 Purple Haze</span>
+            <span class="level">Lv.<span class="lvl">1</span></span>
+          </div>
+          <div class="plants" id="plants-2"></div>
+          <div class="box-label">Коробка: <span class="box-count">0</span>/20</div>
+          <div class="box"><div class="box-fill"></div></div>
+          <button data-floor="2">Апгрейд (<span class="cost">50</span>)</button>
+        </div>
+
+        <!-- Этаж 3 - Bubblegum -->
+        <div class="floor" id="floor-3" style="--color: #E91E63">
+          <div class="floor-header">
+            <span>🍬 Bubblegum</span>
+            <span class="level">Lv.<span class="lvl">1</span></span>
+          </div>
+          <div class="plants" id="plants-3"></div>
+          <div class="box-label">Коробка: <span class="box-count">0</span>/20</div>
+          <div class="box"><div class="box-fill"></div></div>
+          <button data-floor="3">Апгрейд (<span class="cost">50</span>)</button>
+        </div>
+      </main>
+    </div>
+
+    <!-- Оффлайн попап -->
+    <div id="offline-popup">
+      <div class="popup-content">
+        <h2>Пока вас не было...</h2>
+        <p>Курьеры заработали</p>
+        <p style="font-size: 28px; color: var(--gold); margin: 10px 0;" id="offline-coins">0</p>
+        <p>монет</p>
+        <button id="collect-offline">Забрать</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===================== ДАННЫЕ ИГРЫ =====================
+    const player = {
+      coins: 0,
+      lastSaveTime: Date.now()
+    };
+
+    const warehouse = {
+      amount: 0,
+      capacity: 500,
+      add(qty) {
+        this.amount = Math.min(this.amount + qty, this.capacity);
+      },
+      remove(qty) {
+        const taken = Math.min(qty, this.amount);
+        this.amount -= taken;
+        return taken;
+      }
+    };
+
+    const floors = [
+      { id: 1, name: "Green Kush", color: "#4CAF50", level: 1, baseValue: 5,  baseGrow: 2.8, boxCap: 20, current: 0 },
+      { id: 2, name: "Purple Haze", color: "#9C27B0", level: 1, baseValue: 9,  baseGrow: 3.8, boxCap: 20, current: 0 },
+      { id: 3, name: "Bubblegum",  color: "#E91E63", level: 1, baseValue: 15, baseGrow: 5.0, boxCap: 20, current: 0 }
+    ];
+
+    const elevator = {
+      level: 1,
+      capacity: 30,
+      currentLoad: 0,
+      position: 0,          // 0 = склад, 1-3 = этажи
+      state: "idle",        // idle | down | up
+      lastAction: Date.now(),
+      targetFloor: 3
+    };
+
+    const couriers = {
+      level: 1,
+      count: 1,
+      capacityPer: 12,
+      speed: 3.5,           // секунд на рейс
+      lastDelivery: Date.now()
+    };
+
+    // ===================== ВСПОМОГАТЕЛЬНЫЕ =====================
+    function floorGrowTime(f) {
+      return f.baseGrow / (1 + (f.level - 1) * 0.22);
+    }
+
+    function floorUnitValue(f) {
+      return f.baseValue * (1 + (f.level - 1) * 0.35);
+    }
+
+    function floorUpgradeCost(f) {
+      return Math.floor(45 * Math.pow(1.52, f.level - 1));
+    }
+
+    function elevCapacity() {
+      return Math.floor(elevator.capacity * (1 + (elevator.level - 1) * 0.32));
+    }
+
+    function elevUpgradeCost() {
+      return Math.floor(110 * Math.pow(1.68, elevator.level - 1));
+    }
+
+    function elevMoveTime() {
+      return 1.6 / (1 + (elevator.level - 1) * 0.18); // сек на этаж
+    }
+
+    function courierCapacity() {
+      return couriers.count * couriers.capacityPer * (1 + (couriers.level - 1) * 0.22);
+    }
+
+    function courierInterval() {
+      return couriers.speed / (1 + (couriers.level - 1) * 0.14);
+    }
+
+    function courierUpgradeCost() {
+      return Math.floor(180 * Math.pow(1.62, couriers.level - 1));
+    }
+
+    // ===================== ИГРОВАЯ ЛОГИКА =====================
+    function produce(delta) {
+      floors.forEach(f => {
+        const growTime = floorGrowTime(f);
+        const canGrow = Math.floor(delta / growTime);
+        if (canGrow <= 0) return;
+        const free = f.boxCap - f.current;
+        const added = Math.min(canGrow, free);
+        f.current += added;
+      });
+    }
+
+    function updateElevator(now) {
+      const moveTimeMs = elevMoveTime() * 1000;
+
+      if (elevator.state === "idle") {
+        // Начинаем спуск, если есть что забирать
+        const hasCargo = floors.some(f => f.current > 0);
+        if (hasCargo || elevator.currentLoad > 0) {
+          elevator.state = "down";
+          elevator.targetFloor = 3;
+          elevator.lastAction = now;
+        }
+        return;
+      }
+
+      if (elevator.state === "down") {
+        if (now - elevator.lastAction >= moveTimeMs) {
+          // Приехали на этаж — забираем
+          const f = floors.find(fl => fl.id === elevator.targetFloor);
+          if (f) {
+            const free = elevCapacity() - elevator.currentLoad;
+            const taken = Math.min(free, f.current);
+            f.current -= taken;
+            elevator.currentLoad += taken;
+          }
+
+          elevator.targetFloor--;
+          elevator.lastAction = now;
+
+          if (elevator.targetFloor < 1) {
+            elevator.state = "up";
+            elevator.targetFloor = 0;
+          }
+        }
+      }
+
+      if (elevator.state === "up") {
+        if (now - elevator.lastAction >= moveTimeMs * 1.2) {
+          // Приехали на склад
+          warehouse.add(elevator.currentLoad);
+          elevator.currentLoad = 0;
+          elevator.state = "idle";
+          elevator.lastAction = now;
+        }
+      }
+
+      // Позиция кабины для анимации (0 = верх, 3 = низ)
+      if (elevator.state === "down") {
+        elevator.position = 4 - elevator.targetFloor;
+      } else if (elevator.state === "up") {
+        elevator.position = 0;
+      } else {
+        elevator.position = 0;
+      }
+    }
+
+    function updateCouriers(now) {
+      const interval = courierInterval() * 1000;
+      const elapsed = now - couriers.lastDelivery;
+      if (elapsed < interval) return 0;
+
+      const trips = Math.floor(elapsed / interval);
+      let totalEarned = 0;
+
+      for (let i = 0; i < trips; i++) {
+        const canTake = Math.min(courierCapacity(), warehouse.amount);
+        if (canTake <= 0) break;
+
+        warehouse.remove(canTake);
+        // Средняя цена (можно сделать умнее по сортам)
+        const avgPrice = 7.5;
+        const earned = canTake * avgPrice;
+        player.coins += earned;
+        totalEarned += earned;
+      }
+
+      couriers.lastDelivery = now;
+      return totalEarned;
+    }
+
+    // ===================== ОФФЛАЙН =====================
+    function calculateOffline() {
+      const now = Date.now();
+      const offlineSec = Math.min((now - player.lastSaveTime) / 1000, 8 * 3600); // макс 8 часов
+      if (offlineSec < 15) return 0;
+
+      // Упрощённый расчёт
+      let produced = 0;
+      floors.forEach(f => {
+        const units = Math.floor(offlineSec / floorGrowTime(f) * 0.65);
+        produced += units;
+      });
+
+      const possibleDeliveries = offlineSec / courierInterval();
+      const delivered = Math.min(produced, possibleDeliveries * courierCapacity());
+      const earned = Math.floor(delivered * 7.5 * 0.7); // 70% эффективности
+
+      return earned;
+    }
+
+    // ===================== СОХРАНЕНИЕ =====================
+    function save() {
+      const data = {
+        coins: player.coins,
+        lastSaveTime: Date.now(),
+        warehouse: warehouse.amount,
+        floors: floors.map(f => ({ level: f.level, current: f.current, boxCap: f.boxCap })),
+        elevator: { level: elevator.level },
+        couriers: { level: couriers.level, count: couriers.count }
+      };
+      localStorage.setItem("hydroFarmSave", JSON.stringify(data));
+    }
+
+    function load() {
+      const raw = localStorage.getItem("hydroFarmSave");
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        player.coins = data.coins || 0;
+        player.lastSaveTime = data.lastSaveTime || Date.now();
+        warehouse.amount = data.warehouse || 0;
+
+        if (data.floors) {
+          data.floors.forEach((saved, i) => {
+            floors[i].level = saved.level || 1;
+            floors[i].current = saved.current || 0;
+            floors[i].boxCap = saved.boxCap || 20;
+          });
+        }
+        if (data.elevator) elevator.level = data.elevator.level || 1;
+        if (data.couriers) {
+          couriers.level = data.couriers.level || 1;
+          couriers.count = data.couriers.count || 1;
+        }
+      } catch (e) {}
+    }
+
+    // ===================== РЕНДЕР =====================
+    function render() {
+      // Монеты
+      document.getElementById("coins").textContent = Math.floor(player.coins).toLocaleString("ru");
+
+      // Склад
+      document.getElementById("warehouse-amount").textContent = Math.floor(warehouse.amount);
+
+      // Курьеры
+      document.getElementById("courier-count").textContent = couriers.count;
+      document.getElementById("courier-level").textContent = couriers.level;
+      document.getElementById("courier-cost").textContent = courierUpgradeCost();
+
+      // Лифт
+      document.getElementById("elev-level").textContent = elevator.level;
+      document.getElementById("elev-load").textContent = `${elevator.currentLoad}/${elevCapacity()}`;
+      document.getElementById("elev-cost").textContent = elevUpgradeCost();
+
+      // Позиция кабины
+      const cabin = document.getElementById("elevator-cabin");
+      const shaftHeight = document.getElementById("elevator-shaft").clientHeight;
+      const maxPos = shaftHeight - 32;
+      cabin.style.top = `${(elevator.position / 3) * maxPos}px`;
+      cabin.textContent = elevator.currentLoad;
+
+      // Этажи
+      floors.forEach(f => {
+        const el = document.getElementById(`floor-${f.id}`);
+        el.querySelector(".lvl").textContent = f.level;
+        el.querySelector(".box-count").textContent = Math.floor(f.current);
+        el.querySelector(".box-fill").style.width = `${(f.current / f.boxCap) * 100}%`;
+        el.querySelector(".cost").textContent = floorUpgradeCost(f);
+
+        // Кусты (визуал)
+        const plantsEl = el.querySelector(".plants");
+        const maxPlants = 8;
+        const visible = Math.min(maxPlants, Math.ceil((f.current / f.boxCap) * maxPlants) + 1);
+        if (plantsEl.children.length !== visible) {
+          plantsEl.innerHTML = "";
+          for (let i = 0; i < visible; i++) {
+            const p = document.createElement("div");
+            p.className = "plant";
+            plantsEl.appendChild(p);
+          }
+        }
+      });
+    }
+
+    // ===================== УПРАВЛЕНИЕ =====================
+    document.getElementById("upgrade-elev").onclick = () => {
+      const cost = elevUpgradeCost();
+      if (player.coins >= cost) {
+        player.coins -= cost;
+        elevator.level++;
+        save();
+        render();
+      }
+    };
+
+    document.getElementById("upgrade-courier").onclick = () => {
+      const cost = courierUpgradeCost();
+      if (player.coins >= cost) {
+        player.coins -= cost;
+        couriers.level++;
+        if (couriers.level % 2 === 0) couriers.count++;
+        save();
+        render();
+      }
+    };
+
+    document.querySelectorAll("#floors button").forEach(btn => {
+      btn.onclick = () => {
+        const id = +btn.dataset.floor;
+        const f = floors.find(fl => fl.id === id);
+        const cost = floorUpgradeCost(f);
+        if (player.coins >= cost) {
+          player.coins -= cost;
+          f.level++;
+          f.boxCap = Math.floor(20 * (1 + f.level * 0.28));
+          save();
+          render();
+        }
+      };
+    });
+
+    document.getElementById("collect-offline").onclick = () => {
+      document.getElementById("offline-popup").classList.remove("show");
+    };
+
+    // ===================== ГЛАВНЫЙ ЦИКЛ =====================
+    let lastTick = Date.now();
+
+    function gameLoop(now) {
+      const delta = (now - lastTick) / 1000;
+      lastTick = now;
+
+      produce(delta);
+      updateElevator(now);
+      updateCouriers(now);
+      render();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    // ===== СТАРТ =====
+    load();
+
+    const offlineEarned = calculateOffline();
+    if (offlineEarned > 0) {
+      player.coins += offlineEarned;
+      document.getElementById("offline-coins").textContent = offlineEarned.toLocaleString("ru");
+      document.getElementById("offline-popup").classList.add("show");
+    }
+
+    player.lastSaveTime = Date.now();
+    save();
+    render();
+    requestAnimationFrame(gameLoop);
+
+    // Автосохранение
+    setInterval(save, 12000);
+  </script>
+</body>
+</html>
