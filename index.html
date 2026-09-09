@@ -10,8 +10,6 @@
       --bg: #0f0c29;
       --text: #ffffff;
       --button: #e94560;
-      --button-text: #ffffff;
-      --secondary: #1a1a2e;
       --gold: #FFD700;
     }
 
@@ -38,21 +36,20 @@
       width: 100%;
       max-width: 430px;
       height: 100%;
-      background: linear-gradient(to bottom, #0f0c29 0%, #302b63 40%, #24243e 100%);
+      background: linear-gradient(to bottom, #0f0c29 0%, #302b63 45%, #24243e 100%);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
     }
 
-    /* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
+    /* Верхняя панель */
     #top-bar {
-      padding: 12px 14px 8px;
+      padding: 12px 14px 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 20;
-      position: relative;
     }
 
     .coins {
@@ -62,19 +59,10 @@
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
 
-    .lvl-badge {
-      background: rgba(0,0,0,0.4);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    /* ===== ЗОНА ДОСТАВКИ (КУРЬЕРЫ) ===== */
+    /* Зона доставки */
     #delivery-zone {
-      height: 110px;
+      height: 115px;
       position: relative;
-      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.3));
       overflow: hidden;
       border-bottom: 3px solid #2a2a4a;
     }
@@ -84,67 +72,50 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 70px;
-      background: 
-        linear-gradient(to top, #1a1a2e 20%, transparent),
-        repeating-linear-gradient(90deg, 
-          #1f1f3a 0px, #1f1f3a 18px, 
-          #16162b 18px, #16162b 40px);
-      opacity: 0.7;
+      height: 75px;
+      background: linear-gradient(to top, #1a1a2e 30%, transparent),
+                  repeating-linear-gradient(90deg, #1f1f3a 0px, #1f1f3a 16px, #16162b 16px, #16162b 38px);
+      opacity: 0.75;
     }
 
-    .warehouse-building {
+    .building {
       position: absolute;
-      bottom: 8px;
-      width: 70px;
-      height: 55px;
+      bottom: 10px;
+      width: 68px;
+      height: 52px;
       background: #3a3a5c;
       border-radius: 6px 6px 0 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      padding-bottom: 4px;
+      padding-bottom: 5px;
       font-size: 11px;
       font-weight: 700;
       box-shadow: 0 0 0 2px #2a2a4a;
     }
-
-    .warehouse-building.left { left: 8px; }
-    .warehouse-building.right { right: 8px; }
-
-    .warehouse-building .lvl {
+    .building.left { left: 6px; }
+    .building.right { right: 6px; }
+    .building .label {
       background: #4a4a6a;
       padding: 2px 6px;
       border-radius: 4px;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
-    /* Курьеры на скутерах */
+    /* Скутеры */
     .scooter {
       position: absolute;
-      bottom: 12px;
-      width: 70px;
-      height: 50px;
-      transition: left 0.1s linear;
+      bottom: 14px;
+      font-size: 38px;
+      filter: drop-shadow(0 3px 3px rgba(0,0,0,0.45));
       z-index: 5;
+      transition: left 0.05s linear;
     }
-
-    .scooter-body {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .scooter-emoji {
-      font-size: 42px;
-      filter: drop-shadow(0 3px 3px rgba(0,0,0,0.4));
-    }
-
     .scooter-load {
       position: absolute;
-      top: -6px;
-      right: 2px;
+      top: -8px;
+      right: -4px;
       background: #4CAF50;
       color: white;
       font-size: 10px;
@@ -154,17 +125,16 @@
       border: 1px solid #fff;
     }
 
-    /* ===== ОСНОВНАЯ ЗОНА ===== */
+    /* Основная зона */
     #main-area {
       flex: 1;
       display: flex;
       overflow: hidden;
-      position: relative;
     }
 
-    /* ===== ЛИФТ ===== */
+    /* Лифт */
     #elevator-zone {
-      width: 78px;
+      width: 76px;
       background: #12121f;
       border-right: 3px solid #2a2a4a;
       display: flex;
@@ -172,19 +142,18 @@
       align-items: center;
       padding: 8px 4px;
       flex-shrink: 0;
-      z-index: 10;
     }
 
     .elev-info {
       text-align: center;
       font-size: 11px;
       margin-bottom: 6px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
     #elevator-shaft {
       flex: 1;
-      width: 54px;
+      width: 52px;
       background: #0d0d18;
       border: 2px solid #333;
       border-radius: 8px;
@@ -195,28 +164,27 @@
 
     #elevator-cabin {
       position: absolute;
-      left: 4px;
+      left: 3px;
       width: 42px;
-      height: 48px;
+      height: 46px;
       background: linear-gradient(to bottom, #5c6bc0, #3949ab);
       border-radius: 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       border: 2px solid #9fa8da;
     }
-
     #elevator-cabin .load {
       font-size: 10px;
       font-weight: 700;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.35);
       padding: 1px 5px;
       border-radius: 6px;
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
     .elev-btn {
@@ -230,7 +198,7 @@
       font-size: 11px;
     }
 
-    /* ===== ЭТАЖИ ===== */
+    /* Этажи */
     #floors {
       flex: 1;
       display: flex;
@@ -242,100 +210,82 @@
     }
 
     .floor {
-      background: rgba(20, 20, 35, 0.85);
+      background: rgba(20, 20, 35, 0.88);
       border-radius: 14px;
       padding: 10px;
       border: 1px solid rgba(255,255,255,0.08);
-      position: relative;
-      min-height: 110px;
+      min-height: 108px;
     }
 
     .floor-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
-
-    .floor-name {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
+    .floor-name { font-size: 14px; font-weight: 700; }
     .floor-level {
       background: linear-gradient(135deg, #e94560, #c81e4a);
-      padding: 3px 10px;
+      padding: 3px 9px;
       border-radius: 8px;
       font-size: 12px;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 3px;
     }
 
     .floor-stats {
       font-size: 11px;
-      opacity: 0.8;
-      margin-bottom: 6px;
+      opacity: 0.75;
+      margin-bottom: 5px;
     }
 
-    /* Кусты */
     .plants-row {
       display: flex;
-      gap: 6px;
-      margin-bottom: 8px;
-      height: 48px;
+      gap: 5px;
+      height: 46px;
       align-items: flex-end;
+      margin-bottom: 7px;
       overflow: hidden;
     }
 
     .plant {
-      width: 36px;
-      height: 42px;
+      width: 34px;
+      height: 40px;
       position: relative;
       flex-shrink: 0;
     }
-
     .plant-pot {
       position: absolute;
       bottom: 0;
-      left: 6px;
+      left: 5px;
       width: 24px;
-      height: 14px;
+      height: 13px;
       background: #8d6e63;
       border-radius: 2px 2px 4px 4px;
       border: 1px solid #5d4037;
     }
-
     .plant-body {
       position: absolute;
-      bottom: 12px;
+      bottom: 11px;
       left: 50%;
       transform: translateX(-50%);
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50% 50% 45% 45%;
-      box-shadow: inset -4px -4px 0 rgba(0,0,0,0.15);
+      box-shadow: inset -3px -3px 0 rgba(0,0,0,0.18);
     }
-
-    .plant-body.green { background: radial-gradient(circle at 30% 30%, #81c784, #2e7d32); }
+    .plant-body.green  { background: radial-gradient(circle at 30% 30%, #81c784, #2e7d32); }
     .plant-body.purple { background: radial-gradient(circle at 30% 30%, #ce93d8, #6a1b9a); }
-    .plant-body.pink { background: radial-gradient(circle at 30% 30%, #f48fb1, #c2185b); }
+    .plant-body.pink   { background: radial-gradient(circle at 30% 30%, #f48fb1, #c2185b); }
 
-    /* Дроны */
     .drone {
       position: absolute;
-      font-size: 14px;
-      animation: droneFly 3s ease-in-out infinite;
-      opacity: 0.9;
-      z-index: 5;
+      font-size: 13px;
+      animation: droneFly 2.8s ease-in-out infinite;
+      z-index: 4;
     }
-
     @keyframes droneFly {
       0%, 100% { transform: translate(0, 0); }
-      25% { transform: translate(8px, -6px); }
-      50% { transform: translate(-4px, -10px); }
-      75% { transform: translate(6px, -4px); }
+      50% { transform: translate(6px, -9px); }
     }
 
     .box-row {
@@ -343,15 +293,13 @@
       align-items: center;
       gap: 8px;
     }
-
     .box {
       flex: 1;
-      height: 12px;
+      height: 11px;
       background: rgba(0,0,0,0.4);
       border-radius: 6px;
       overflow: hidden;
     }
-
     .box-fill {
       height: 100%;
       border-radius: 6px;
@@ -373,7 +321,7 @@
     #offline-popup {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.82);
+      background: rgba(0,0,0,0.85);
       display: none;
       align-items: center;
       justify-content: center;
@@ -381,21 +329,19 @@
       padding: 20px;
     }
     #offline-popup.show { display: flex; }
-
     .popup-content {
       background: #1a1a2e;
-      padding: 28px 24px;
-      border-radius: 20px;
+      padding: 28px 22px;
+      border-radius: 18px;
       text-align: center;
       width: 100%;
-      max-width: 300px;
-      border: 1px solid rgba(255,255,255,0.1);
+      max-width: 290px;
     }
     .popup-content h2 { color: var(--gold); margin-bottom: 8px; }
     .popup-content button {
-      margin-top: 18px;
+      margin-top: 16px;
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border: none;
       border-radius: 12px;
       background: var(--button);
@@ -407,43 +353,27 @@
 </head>
 <body>
   <div id="game">
-    <!-- Верхняя панель -->
     <div id="top-bar">
       <div class="coins">💰 <span id="coins">0</span></div>
-      <div class="lvl-badge">Ферма</div>
     </div>
 
-    <!-- Зона доставки с курьерами -->
     <div id="delivery-zone">
       <div class="city-bg"></div>
 
-      <div class="warehouse-building left">
-        <div class="lvl">Склад</div>
-        <div id="warehouse-amount" style="font-size:13px">0</div>
+      <div class="building left">
+        <div class="label">Склад</div>
+        <div id="warehouse-amount">0</div>
+      </div>
+      <div class="building right" id="courier-upgrade">
+        <div class="label">Курьеры</div>
+        <div>Lv.<span id="courier-level">1</span></div>
       </div>
 
-      <div class="warehouse-building right">
-        <div class="lvl">Офис</div>
-        <div style="font-size:11px">Lv.<span id="courier-level">1</span></div>
-      </div>
-
-      <!-- Курьеры -->
-      <div class="scooter" id="scooter1" style="left: 90px;">
-        <div class="scooter-body">
-          <div class="scooter-emoji">🛵</div>
-          <div class="scooter-load" id="scooter-load1">0</div>
-        </div>
-      </div>
-      <div class="scooter" id="scooter2" style="left: 200px;">
-        <div class="scooter-body">
-          <div class="scooter-emoji">🛵</div>
-          <div class="scooter-load" id="scooter-load2">0</div>
-        </div>
-      </div>
+      <div class="scooter" id="scooter1">🛵<div class="scooter-load" id="load1">0</div></div>
+      <div class="scooter" id="scooter2">🛵<div class="scooter-load" id="load2">0</div></div>
     </div>
 
     <div id="main-area">
-      <!-- Лифт -->
       <aside id="elevator-zone">
         <div class="elev-info">
           🛗<br>Lv.<span id="elev-level">1</span><br>
@@ -458,9 +388,7 @@
         <button class="elev-btn" id="upgrade-elev">Апгрейд<br><span id="elev-cost">120</span></button>
       </aside>
 
-      <!-- Этажи -->
       <main id="floors">
-        <!-- Этаж 1 -->
         <div class="floor" id="floor-1">
           <div class="floor-header">
             <div class="floor-name">🌿 Green Kush</div>
@@ -474,7 +402,6 @@
           </div>
         </div>
 
-        <!-- Этаж 2 -->
         <div class="floor" id="floor-2">
           <div class="floor-header">
             <div class="floor-name">🍇 Purple Haze</div>
@@ -488,7 +415,6 @@
           </div>
         </div>
 
-        <!-- Этаж 3 -->
         <div class="floor" id="floor-3">
           <div class="floor-header">
             <div class="floor-name">🍬 Bubblegum</div>
@@ -504,12 +430,11 @@
       </main>
     </div>
 
-    <!-- Оффлайн -->
     <div id="offline-popup">
       <div class="popup-content">
         <h2>Пока вас не было</h2>
         <p>Курьеры привезли</p>
-        <p style="font-size: 34px; color: var(--gold); margin: 12px 0; font-weight: 800;" id="offline-coins">0</p>
+        <p style="font-size:32px;color:var(--gold);margin:10px 0;font-weight:800" id="offline-coins">0</p>
         <p>монет</p>
         <button id="collect-offline">Забрать</button>
       </div>
@@ -518,10 +443,7 @@
 
   <script>
     const tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-    }
+    if (tg) { tg.ready(); tg.expand(); }
 
     function haptic(type = 'light') {
       if (tg?.HapticFeedback) {
@@ -531,7 +453,6 @@
       }
     }
 
-    // ===== ДАННЫЕ =====
     const player = { coins: 0, lastSaveTime: Date.now() };
     const warehouse = {
       amount: 0, capacity: 500,
@@ -540,9 +461,9 @@
     };
 
     const floors = [
-      { id: 1, name: "Green Kush", color: "green", level: 1, baseValue: 5, baseGrow: 2.6, boxCap: 20, current: 0 },
-      { id: 2, name: "Purple Haze", color: "purple", level: 1, baseValue: 9, baseGrow: 3.5, boxCap: 20, current: 0 },
-      { id: 3, name: "Bubblegum", color: "pink", level: 1, baseValue: 14, baseGrow: 4.8, boxCap: 20, current: 0 }
+      { id: 1, color: "green",  level: 1, baseGrow: 2.5, boxCap: 20, current: 0 },
+      { id: 2, color: "purple", level: 1, baseGrow: 3.4, boxCap: 20, current: 0 },
+      { id: 3, color: "pink",   level: 1, baseGrow: 4.6, boxCap: 20, current: 0 }
     ];
 
     const elevator = {
@@ -550,27 +471,23 @@
       position: 0, state: "idle", lastAction: Date.now(), targetFloor: 3
     };
 
-    const couriers = {
-      level: 1, count: 2, capacityPer: 11, speed: 3.2, lastDelivery: Date.now()
-    };
+    const couriers = { level: 1, count: 2, capacityPer: 11, speed: 3.1, lastDelivery: Date.now() };
 
-    // Анимация скутеров
+    // Скутеры
     const scooters = [
-      { el: null, x: 90, dir: 1, speed: 0.6 },
-      { el: null, x: 210, dir: -1, speed: 0.45 }
+      { el: null, x: 85, dir: 1, speed: 0.55 },
+      { el: null, x: 200, dir: -1, speed: 0.42 }
     ];
 
-    // ===== ФОРМУЛЫ =====
     const floorGrowTime = f => f.baseGrow / (1 + (f.level - 1) * 0.23);
     const floorUpgradeCost = f => Math.floor(42 * Math.pow(1.51, f.level - 1));
     const elevCapacity = () => Math.floor(elevator.capacity * (1 + (elevator.level - 1) * 0.33));
     const elevUpgradeCost = () => Math.floor(105 * Math.pow(1.67, elevator.level - 1));
-    const elevMoveTime = () => 1.55 / (1 + (elevator.level - 1) * 0.19);
+    const elevMoveTime = () => 1.5 / (1 + (elevator.level - 1) * 0.19);
     const courierCapacity = () => couriers.count * couriers.capacityPer * (1 + (couriers.level - 1) * 0.2);
     const courierInterval = () => couriers.speed / (1 + (couriers.level - 1) * 0.15);
     const courierUpgradeCost = () => Math.floor(170 * Math.pow(1.61, couriers.level - 1));
 
-    // ===== ЛОГИКА =====
     function produce(delta) {
       floors.forEach(f => {
         const can = Math.floor(delta / floorGrowTime(f));
@@ -625,16 +542,15 @@
     }
 
     function animateScooters() {
-      const zoneWidth = document.getElementById("delivery-zone").clientWidth;
-      scooters.forEach((s, i) => {
+      const w = document.getElementById("delivery-zone").clientWidth;
+      scooters.forEach(s => {
         s.x += s.speed * s.dir;
-        if (s.x > zoneWidth - 90) s.dir = -1;
-        if (s.x < 80) s.dir = 1;
+        if (s.x > w - 85) s.dir = -1;
+        if (s.x < 75) s.dir = 1;
         if (s.el) s.el.style.left = s.x + "px";
       });
     }
 
-    // ===== СОХРАНЕНИЕ =====
     function save() {
       localStorage.setItem("hydroFarmSave", JSON.stringify({
         coins: player.coins,
@@ -675,7 +591,118 @@
       return Math.floor(del * 7.8 * 0.65);
     }
 
-    // ===== РЕНДЕР =====
-    function renderPlants(floor) {
-      const row = document.getElementById(`plants-${floor.id}`);
-      const maxShow
+    function renderPlants(f) {
+      const row = document.getElementById(`plants-${f.id}`);
+      const maxShow = 7;
+      const count = Math.min(maxShow, Math.ceil((f.current / f.boxCap) * maxShow) + (f.current > 0 ? 1 : 0));
+      if (row.children.length === count) return;
+      row.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("div");
+        p.className = "plant";
+        p.innerHTML = `<div class="plant-body ${f.color}"></div><div class="plant-pot"></div>`;
+        if (Math.random() > 0.55) {
+          const d = document.createElement("div");
+          d.className = "drone";
+          d.textContent = "🛸";
+          d.style.left = (6 + Math.random()*14) + "px";
+          d.style.top = (-8 - Math.random()*6) + "px";
+          d.style.animationDelay = (Math.random()*2) + "s";
+          p.appendChild(d);
+        }
+        row.appendChild(p);
+      }
+    }
+
+    function render() {
+      document.getElementById("coins").textContent = Math.floor(player.coins).toLocaleString("ru");
+      document.getElementById("warehouse-amount").textContent = Math.floor(warehouse.amount);
+      document.getElementById("courier-level").textContent = couriers.level;
+      document.getElementById("elev-level").textContent = elevator.level;
+      document.getElementById("elev-load").textContent = `${elevator.currentLoad}/${elevCapacity()}`;
+      document.getElementById("elev-cost").textContent = elevUpgradeCost();
+      document.getElementById("cabin-load").textContent = elevator.currentLoad;
+
+      const cabin = document.getElementById("elevator-cabin");
+      const h = document.getElementById("elevator-shaft").clientHeight;
+      cabin.style.top = ((elevator.position / 3) * (h - 50)) + "px";
+
+      floors.forEach(f => {
+        const el = document.getElementById(`floor-${f.id}`);
+        el.querySelector(".lvl").textContent = f.level;
+        el.querySelector(".box-count").textContent = Math.floor(f.current);
+        el.querySelector(".box-cap").textContent = f.boxCap;
+        el.querySelector(".box-fill").style.width = (f.current / f.boxCap * 100) + "%";
+        el.querySelector(".cost").textContent = floorUpgradeCost(f);
+        renderPlants(f);
+      });
+
+      document.getElementById("load1").textContent = warehouse.amount > 5 ? Math.floor(Math.random()*9+2) : 0;
+      document.getElementById("load2").textContent = warehouse.amount > 5 ? Math.floor(Math.random()*7+1) : 0;
+    }
+
+    // Кнопки
+    document.getElementById("upgrade-elev").onclick = () => {
+      const c = elevUpgradeCost();
+      if (player.coins >= c) {
+        player.coins -= c; elevator.level++;
+        haptic("success"); save(); render();
+      } else haptic("error");
+    };
+
+    document.getElementById("courier-upgrade").onclick = () => {
+      const c = courierUpgradeCost();
+      if (player.coins >= c) {
+        player.coins -= c; couriers.level++;
+        if (couriers.level % 2 === 0) couriers.count++;
+        haptic("success"); save(); render();
+      } else haptic("error");
+    };
+
+    document.querySelectorAll("[data-floor]").forEach(btn => {
+      btn.onclick = () => {
+        const f = floors.find(fl => fl.id === +btn.dataset.floor);
+        const c = floorUpgradeCost(f);
+        if (player.coins >= c) {
+          player.coins -= c; f.level++;
+          f.boxCap = Math.floor(20 * (1 + f.level * 0.27));
+          haptic("success"); save(); render();
+        } else haptic("error");
+      };
+    });
+
+    document.getElementById("collect-offline").onclick = () => {
+      document.getElementById("offline-popup").classList.remove("show");
+      haptic("success");
+    };
+
+    // Старт
+    scooters[0].el = document.getElementById("scooter1");
+    scooters[1].el = document.getElementById("scooter2");
+
+    load();
+    const offline = calculateOffline();
+    if (offline > 0) {
+      player.coins += offline;
+      document.getElementById("offline-coins").textContent = offline.toLocaleString("ru");
+      document.getElementById("offline-popup").classList.add("show");
+    }
+    player.lastSaveTime = Date.now();
+    save();
+
+    let last = Date.now();
+    function loop(now) {
+      const delta = (now - last) / 1000;
+      last = now;
+      produce(delta);
+      updateElevator(now);
+      updateCouriers(now);
+      animateScooters();
+      render();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    setInterval(save, 15000);
+  </script>
+</body>
+</html>
