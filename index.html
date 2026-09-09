@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hydro Farm Idle — MVP</title>
+  <title>Hydro Farm Idle</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #1a1a2e;
-      --panel: #16213e;
-      --accent: #0f3460;
-      --text: #e8e8e8;
+      --bg: var(--tg-theme-bg-color, #1a1a2e);
+      --text: var(--tg-theme-text-color, #e8e8e8);
+      --hint: var(--tg-theme-hint-color, #999);
+      --button: var(--tg-theme-button-color, #e94560);
+      --button-text: var(--tg-theme-button-text-color, #ffffff);
+      --secondary: var(--tg-theme-secondary-bg-color, #16213e);
+      --header: var(--tg-theme-header-bg-color, #0f3460);
+      --accent: var(--tg-theme-accent-text-color, #0f3460);
+      --gold: #FFD700;
       --green: #4CAF50;
       --purple: #9C27B0;
       --pink: #E91E63;
-      --gold: #FFD700;
     }
 
     * {
@@ -25,11 +30,12 @@
     }
 
     body {
-      background: #0d0d1a;
+      background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow: hidden;
       height: 100vh;
+      height: 100dvh;
       display: flex;
       justify-content: center;
     }
@@ -37,7 +43,7 @@
     #game {
       width: 100%;
       max-width: 420px;
-      height: 100vh;
+      height: 100%;
       background: var(--bg);
       display: flex;
       flex-direction: column;
@@ -46,47 +52,48 @@
 
     /* ===== ВЕРХНЯЯ ЗОНА ===== */
     #top-zone {
-      background: var(--panel);
-      padding: 12px 14px;
-      border-bottom: 2px solid var(--accent);
+      background: var(--secondary);
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       flex-shrink: 0;
     }
 
     .coins {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--gold);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .top-row {
       display: flex;
-      justify-content: space-between;
       gap: 10px;
       font-size: 13px;
     }
 
     .warehouse, .couriers {
-      background: var(--accent);
-      padding: 8px 10px;
-      border-radius: 10px;
+      background: var(--bg);
+      padding: 10px;
+      border-radius: 12px;
       flex: 1;
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
     .couriers button, .elev-btn, .floor button {
-      margin-top: 6px;
+      margin-top: 8px;
       width: 100%;
-      padding: 7px;
+      padding: 9px;
       border: none;
-      border-radius: 8px;
-      background: #e94560;
-      color: white;
+      border-radius: 10px;
+      background: var(--button);
+      color: var(--button-text);
       font-weight: 600;
-      font-size: 12px;
+      font-size: 13px;
       cursor: pointer;
+      transition: transform 0.1s;
     }
 
     .couriers button:active, .elev-btn:active, .floor button:active {
@@ -103,13 +110,13 @@
 
     /* ===== ЛИФТ ===== */
     #elevator-zone {
-      width: 90px;
-      background: #0f0f23;
-      border-right: 2px solid var(--accent);
+      width: 92px;
+      background: rgba(0,0,0,0.25);
+      border-right: 1px solid rgba(255,255,255,0.06);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px 6px;
+      padding: 12px 6px;
       flex-shrink: 0;
     }
 
@@ -117,15 +124,15 @@
       text-align: center;
       font-size: 12px;
       margin-bottom: 8px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     #elevator-shaft {
       flex: 1;
-      width: 46px;
-      background: #1a1a2e;
-      border: 2px solid #333;
-      border-radius: 8px;
+      width: 48px;
+      background: rgba(0,0,0,0.3);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
       position: relative;
       overflow: hidden;
       margin-bottom: 10px;
@@ -133,41 +140,42 @@
 
     #elevator-cabin {
       position: absolute;
-      left: 3px;
+      left: 4px;
       width: 36px;
-      height: 28px;
+      height: 30px;
       background: linear-gradient(to bottom, #4fc3f7, #0288d1);
-      border-radius: 4px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: bold;
       color: #fff;
-      transition: top 0.4s ease-in-out;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: top 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     }
 
     .elev-btn {
-      font-size: 11px;
-      padding: 8px 4px;
+      font-size: 12px;
+      padding: 9px 4px;
     }
 
     /* ===== ЭТАЖИ ===== */
     #floors {
       flex: 1;
       display: flex;
-      flex-direction: column-reverse; /* этаж 1 снизу */
-      padding: 8px;
-      gap: 8px;
+      flex-direction: column-reverse;
+      padding: 10px;
+      gap: 10px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .floor {
-      background: var(--panel);
-      border-radius: 12px;
-      padding: 10px;
-      border-left: 6px solid var(--color);
+      background: var(--secondary);
+      border-radius: 14px;
+      padding: 12px;
+      border-left: 5px solid var(--color);
       position: relative;
     }
 
@@ -175,22 +183,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
-      font-size: 14px;
+      margin-bottom: 8px;
+      font-size: 15px;
       font-weight: 600;
     }
 
     .level {
-      background: rgba(255,255,255,0.12);
-      padding: 2px 7px;
+      background: rgba(255,255,255,0.1);
+      padding: 3px 9px;
       border-radius: 20px;
       font-size: 12px;
     }
 
     .plants {
       display: flex;
-      gap: 4px;
-      margin-bottom: 6px;
+      gap: 5px;
+      margin-bottom: 7px;
       height: 22px;
     }
 
@@ -199,41 +207,41 @@
       height: 18px;
       border-radius: 50%;
       background: var(--color);
-      opacity: 0.85;
+      opacity: 0.9;
+    }
+
+    .box-label {
+      font-size: 12px;
+      opacity: 0.75;
+      margin-bottom: 4px;
     }
 
     .box {
       height: 14px;
-      background: #0d0d1a;
-      border-radius: 7px;
+      background: rgba(0,0,0,0.35);
+      border-radius: 8px;
       overflow: hidden;
-      margin-bottom: 6px;
-      border: 1px solid #333;
+      margin-bottom: 8px;
     }
 
     .box-fill {
       height: 100%;
       background: var(--color);
       width: 0%;
-      transition: width 0.3s;
-      border-radius: 7px;
-    }
-
-    .box-label {
-      font-size: 11px;
-      opacity: 0.8;
-      margin-bottom: 4px;
+      transition: width 0.35s;
+      border-radius: 8px;
     }
 
     /* Оффлайн попап */
     #offline-popup {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.78);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 100;
+      padding: 20px;
     }
 
     #offline-popup.show {
@@ -241,28 +249,31 @@
     }
 
     .popup-content {
-      background: var(--panel);
-      padding: 24px;
-      border-radius: 16px;
+      background: var(--secondary);
+      padding: 28px 24px;
+      border-radius: 18px;
       text-align: center;
-      width: 80%;
+      width: 100%;
       max-width: 300px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
 
     .popup-content h2 {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: var(--gold);
+      font-size: 20px;
     }
 
     .popup-content button {
-      margin-top: 16px;
-      padding: 10px 24px;
+      margin-top: 18px;
+      padding: 12px 28px;
       border: none;
-      border-radius: 10px;
-      background: #e94560;
-      color: white;
+      border-radius: 12px;
+      background: var(--button);
+      color: var(--button-text);
       font-size: 16px;
       font-weight: 600;
+      width: 100%;
     }
   </style>
 </head>
@@ -279,7 +290,7 @@
         <div class="couriers">
           🛵 Курьеры: <span id="courier-count">1</span><br>
           Lv.<span id="courier-level">1</span>
-          <button id="upgrade-courier">Апгрейд (<span id="courier-cost">200</span>)</button>
+          <button id="upgrade-courier">Апгрейд (<span id="="courier-cost">200</span>)</button>
         </div>
       </div>
     </header>
@@ -300,7 +311,6 @@
 
       <!-- Этажи -->
       <main id="floors">
-        <!-- Этаж 1 - Green Kush -->
         <div class="floor" id="floor-1" style="--color: #4CAF50">
           <div class="floor-header">
             <span>🌿 Green Kush</span>
@@ -312,7 +322,6 @@
           <button data-floor="1">Апгрейд (<span class="cost">50</span>)</button>
         </div>
 
-        <!-- Этаж 2 - Purple Haze -->
         <div class="floor" id="floor-2" style="--color: #9C27B0">
           <div class="floor-header">
             <span>🍇 Purple Haze</span>
@@ -324,7 +333,6 @@
           <button data-floor="2">Апгрейд (<span class="cost">50</span>)</button>
         </div>
 
-        <!-- Этаж 3 - Bubblegum -->
         <div class="floor" id="floor-3" style="--color: #E91E63">
           <div class="floor-header">
             <span>🍬 Bubblegum</span>
@@ -343,7 +351,7 @@
       <div class="popup-content">
         <h2>Пока вас не было...</h2>
         <p>Курьеры заработали</p>
-        <p style="font-size: 28px; color: var(--gold); margin: 10px 0;" id="offline-coins">0</p>
+        <p style="font-size: 32px; color: var(--gold); margin: 12px 0; font-weight: 700;" id="offline-coins">0</p>
         <p>монет</p>
         <button id="collect-offline">Забрать</button>
       </div>
@@ -351,6 +359,31 @@
   </div>
 
   <script>
+    // ===================== TELEGRAM WEBAPP =====================
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      // Можно включить подтверждение закрытия
+      // tg.enableClosingConfirmation();
+      
+      // Применяем тему
+      document.documentElement.style.setProperty('--bg', tg.themeParams.bg_color || '#1a1a2e');
+      document.documentElement.style.setProperty('--text', tg.themeParams.text_color || '#e8e8e8');
+      document.documentElement.style.setProperty('--button', tg.themeParams.button_color || '#e94560');
+      document.documentElement.style.setProperty('--button-text', tg.themeParams.button_text_color || '#ffffff');
+      document.documentElement.style.setProperty('--secondary', tg.themeParams.secondary_bg_color || '#16213e');
+    }
+
+    // Вибрация
+    function haptic(type = 'light') {
+      if (tg?.HapticFeedback) {
+        if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+        else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
+        else tg.HapticFeedback.impactOccurred('light');
+      }
+    }
+
     // ===================== ДАННЫЕ ИГРЫ =====================
     const player = {
       coins: 0,
@@ -380,8 +413,8 @@
       level: 1,
       capacity: 30,
       currentLoad: 0,
-      position: 0,          // 0 = склад, 1-3 = этажи
-      state: "idle",        // idle | down | up
+      position: 0,
+      state: "idle",
       lastAction: Date.now(),
       targetFloor: 3
     };
@@ -390,56 +423,47 @@
       level: 1,
       count: 1,
       capacityPer: 12,
-      speed: 3.5,           // секунд на рейс
+      speed: 3.5,
       lastDelivery: Date.now()
     };
 
-    // ===================== ВСПОМОГАТЕЛЬНЫЕ =====================
+    // ===================== ФОРМУЛЫ =====================
     function floorGrowTime(f) {
-      return f.baseGrow / (1 + (f.level - 1) * 0.22);
+      return f.baseGrow / (1 + (f.level -  1) * 0.22);
     }
-
     function floorUnitValue(f) {
       return f.baseValue * (1 + (f.level - 1) * 0.35);
     }
-
     function floorUpgradeCost(f) {
       return Math.floor(45 * Math.pow(1.52, f.level - 1));
     }
-
     function elevCapacity() {
       return Math.floor(elevator.capacity * (1 + (elevator.level - 1) * 0.32));
     }
-
     function elevUpgradeCost() {
       return Math.floor(110 * Math.pow(1.68, elevator.level - 1));
     }
-
     function elevMoveTime() {
-      return 1.6 / (1 + (elevator.level - 1) * 0.18); // сек на этаж
+      return 1.6 / (1 + (elevator.level - 1) * 0.18);
     }
-
     function courierCapacity() {
       return couriers.count * couriers.capacityPer * (1 + (couriers.level - 1) * 0.22);
     }
-
     function courierInterval() {
       return couriers.speed / (1 + (couriers.level - 1) * 0.14);
     }
-
     function courierUpgradeCost() {
       return Math.floor(180 * Math.pow(1.62, couriers.level - 1));
     }
 
-    // ===================== ИГРОВАЯ ЛОГИКА =====================
+    // ===================== ЛОГИКА =====================
     function produce(delta) {
       floors.forEach(f => {
         const growTime = floorGrowTime(f);
         const canGrow = Math.floor(delta / growTime);
         if (canGrow <= 0) return;
         const free = f.boxCap - f.current;
-        const added = Math.min(canGrow, free);
-        f.current += added;
+        f.current += Math.min(canGrow, free);
       });
     }
 
@@ -447,7 +471,6 @@
       const moveTimeMs = elevMoveTime() * 1000;
 
       if (elevator.state === "idle") {
-        // Начинаем спуск, если есть что забирать
         const hasCargo = floors.some(f => f.current > 0);
         if (hasCargo || elevator.currentLoad > 0) {
           elevator.state = "down";
@@ -459,7 +482,6 @@
 
       if (elevator.state === "down") {
         if (now - elevator.lastAction >= moveTimeMs) {
-          // Приехали на этаж — забираем
           const f = floors.find(fl => fl.id === elevator.targetFloor);
           if (f) {
             const free = elevCapacity() - elevator.currentLoad;
@@ -467,10 +489,8 @@
             f.current -= taken;
             elevator.currentLoad += taken;
           }
-
           elevator.targetFloor--;
           elevator.lastAction = now;
-
           if (elevator.targetFloor < 1) {
             elevator.state = "up";
             elevator.targetFloor = 0;
@@ -479,8 +499,7 @@
       }
 
       if (elevator.state === "up") {
-        if (now - elevator.lastAction >= moveTimeMs * 1.2) {
-          // Приехали на склад
+        if (now - elevator.lastAction >= moveTimeMs * 1.25) {
           warehouse.add(elevator.currentLoad);
           elevator.currentLoad = 0;
           elevator.state = "idle";
@@ -488,11 +507,8 @@
         }
       }
 
-      // Позиция кабины для анимации (0 = верх, 3 = низ)
       if (elevator.state === "down") {
         elevator.position = 4 - elevator.targetFloor;
-      } else if (elevator.state === "up") {
-        elevator.position = 0;
       } else {
         elevator.position = 0;
       }
@@ -501,45 +517,32 @@
     function updateCouriers(now) {
       const interval = courierInterval() * 1000;
       const elapsed = now - couriers.lastDelivery;
-      if (elapsed < interval) return 0;
+      if (elapsed < interval) return;
 
       const trips = Math.floor(elapsed / interval);
-      let totalEarned = 0;
-
       for (let i = 0; i < trips; i++) {
         const canTake = Math.min(courierCapacity(), warehouse.amount);
         if (canTake <= 0) break;
-
         warehouse.remove(canTake);
-        // Средняя цена (можно сделать умнее по сортам)
-        const avgPrice = 7.5;
-        const earned = canTake * avgPrice;
-        player.coins += earned;
-        totalEarned += earned;
+        player.coins += canTake * 7.5;
       }
-
       couriers.lastDelivery = now;
-      return totalEarned;
     }
 
     // ===================== ОФФЛАЙН =====================
     function calculateOffline() {
       const now = Date.now();
-      const offlineSec = Math.min((now - player.lastSaveTime) / 1000, 8 * 3600); // макс 8 часов
-      if (offlineSec < 15) return 0;
+      const offlineSec = Math.min((now - player.lastSaveTime) / 1000, 8 * 3600);
+      if (offlineSec < 20) return 0;
 
-      // Упрощённый расчёт
       let produced = 0;
       floors.forEach(f => {
-        const units = Math.floor(offlineSec / floorGrowTime(f) * 0.65);
-        produced += units;
+        produced += Math.floor(offlineSec / floorGrowTime(f) * 0.65);
       });
 
-      const possibleDeliveries = offlineSec / courierInterval();
-      const delivered = Math.min(produced, possibleDeliveries * courierCapacity());
-      const earned = Math.floor(delivered * 7.5 * 0.7); // 70% эффективности
-
-      return earned;
+      const possible = offlineSec / courierInterval();
+      const delivered = Math.min(produced, possible * courierCapacity());
+      return Math.floor(delivered * 7.5 * 0.7);
     }
 
     // ===================== СОХРАНЕНИЕ =====================
@@ -548,7 +551,11 @@
         coins: player.coins,
         lastSaveTime: Date.now(),
         warehouse: warehouse.amount,
-        floors: floors.map(f => ({ level: f.level, current: f.current, boxCap: f.boxCap })),
+        floors: floors.map(f => ({
+          level: f.level,
+          current: f.current,
+          boxCap: f.boxCap
+        })),
         elevator: { level: elevator.level },
         couriers: { level: couriers.level, count: couriers.count }
       };
@@ -566,9 +573,11 @@
 
         if (data.floors) {
           data.floors.forEach((saved, i) => {
-            floors[i].level = saved.level || 1;
-            floors[i].current = saved.current || 0;
-            floors[i].boxCap = saved.boxCap || 20;
+            if (floors[i]) {
+              floors[i].level = saved.level || 1;
+              floors[i].current = saved.current || 0;
+              floors[i].boxCap = saved.boxCap || 20;
+            }
           });
         }
         if (data.elevator) elevator.level = data.elevator.level || 1;
@@ -581,30 +590,23 @@
 
     // ===================== РЕНДЕР =====================
     function render() {
-      // Монеты
       document.getElementById("coins").textContent = Math.floor(player.coins).toLocaleString("ru");
-
-      // Склад
       document.getElementById("warehouse-amount").textContent = Math.floor(warehouse.amount);
 
-      // Курьеры
       document.getElementById("courier-count").textContent = couriers.count;
       document.getElementById("courier-level").textContent = couriers.level;
       document.getElementById("courier-cost").textContent = courierUpgradeCost();
 
-      // Лифт
       document.getElementById("elev-level").textContent = elevator.level;
       document.getElementById("elev-load").textContent = `${elevator.currentLoad}/${elevCapacity()}`;
       document.getElementById("elev-cost").textContent = elevUpgradeCost();
 
-      // Позиция кабины
       const cabin = document.getElementById("elevator-cabin");
-      const shaftHeight = document.getElementById("elevator-shaft").clientHeight;
-      const maxPos = shaftHeight - 32;
+      const shaft = document.getElementById("elevator-shaft");
+      const maxPos = shaft.clientHeight - 34;
       cabin.style.top = `${(elevator.position / 3) * maxPos}px`;
       cabin.textContent = elevator.currentLoad;
 
-      // Этажи
       floors.forEach(f => {
         const el = document.getElementById(`floor-${f.id}`);
         el.querySelector(".lvl").textContent = f.level;
@@ -612,7 +614,6 @@
         el.querySelector(".box-fill").style.width = `${(f.current / f.boxCap) * 100}%`;
         el.querySelector(".cost").textContent = floorUpgradeCost(f);
 
-        // Кусты (визуал)
         const plantsEl = el.querySelector(".plants");
         const maxPlants = 8;
         const visible = Math.min(maxPlants, Math.ceil((f.current / f.boxCap) * maxPlants) + 1);
@@ -627,14 +628,17 @@
       });
     }
 
-    // ===================== УПРАВЛЕНИЕ =====================
+    // ===================== КНОПКИ =====================
     document.getElementById("upgrade-elev").onclick = () => {
       const cost = elevUpgradeCost();
       if (player.coins >= cost) {
         player.coins -= cost;
         elevator.level++;
+        haptic('success');
         save();
         render();
+      } else {
+        haptic('error');
       }
     };
 
@@ -644,8 +648,11 @@
         player.coins -= cost;
         couriers.level++;
         if (couriers.level % 2 === 0) couriers.count++;
+        haptic('success');
         save();
         render();
+      } else {
+        haptic('error');
       }
     };
 
@@ -658,17 +665,21 @@
           player.coins -= cost;
           f.level++;
           f.boxCap = Math.floor(20 * (1 + f.level * 0.28));
+          haptic('success');
           save();
           render();
+        } else {
+          haptic('error');
         }
       };
     });
 
     document.getElementById("collect-offline").onclick = () => {
       document.getElementById("offline-popup").classList.remove("show");
+      haptic('success');
     };
 
-    // ===================== ГЛАВНЫЙ ЦИКЛ =====================
+    // ===================== ЗАПУСК =====================
     let lastTick = Date.now();
 
     function gameLoop(now) {
@@ -683,7 +694,6 @@
       requestAnimationFrame(gameLoop);
     }
 
-    // ===== СТАРТ =====
     load();
 
     const offlineEarned = calculateOffline();
@@ -697,8 +707,6 @@
     save();
     render();
     requestAnimationFrame(gameLoop);
-
-    // Автосохранение
     setInterval(save, 12000);
   </script>
 </body>
